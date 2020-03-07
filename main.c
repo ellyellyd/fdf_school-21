@@ -1,12 +1,18 @@
 #include "fdf.h"
 #include "unistd.h"//check
 
+/*
+void	draw_3d_mtrx(t_fdf **mtrx)
+{
+}
+*/
+
 void	join_dots_in_col(t_fdf **m, int row, int x)
 {
   int		row2;
 
   row2 = 0;
-  while (row2 <= m[0][0].scale)
+  while (row2 < m[0][0].scale)
   {
   //  printf("%d\n", m[0][0].scale);//check
     mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x + m[0][0].shift_x, row + row2 + m[0][0].shift_y, m[0][0].color);
@@ -31,20 +37,26 @@ void	join_dots(t_fdf **mtx, int row)
   int		x;
 
   x = 0;
-  while (x < mtx[0][0].w)
+  if (row < mtx[0][0].h - 1)
   {
-    if (mtx[row][x].z != 0 || ((x + 1) < mtx[0][0].w && mtx[row][x + 1].z != 0))
-      mtx[0][0].color = 0xFFD8D9;
-    else
-      mtx[0][0].color = 0xB43864;
-    join_dots_in_line(mtx, row, x * mtx[0][0].scale);
-    if (mtx[row][x].z != 0 || (mtx[row + 1] && mtx[row + 1][x].z != 0))
-      mtx[0][0].color = 0xFFD8D9;
-    else
-      mtx[0][0].color = 0xB43864;
-    join_dots_in_col(mtx, row * mtx[0][0].scale, x * mtx[0][0].scale);
-    x++;
+	  while (x < mtx[0][0].w - 1)
+	  {
+		if (mtx[row][x].z != 0 || ((x + 1) < mtx[0][0].w && mtx[row][x + 1].z != 0))
+		  mtx[0][0].color = 0xFFD8D9;
+		else
+		  mtx[0][0].color = 0xB43864;
+		join_dots_in_line(mtx, row, x * mtx[0][0].scale);
+		if (mtx[row][x].z != 0 || (mtx[row + 1] && mtx[row + 1][x].z != 0))
+		  mtx[0][0].color = 0xFFD8D9;
+		else
+		  mtx[0][0].color = 0xB43864;
+		join_dots_in_col(mtx, row * mtx[0][0].scale, x * mtx[0][0].scale);
+		x++;
+	  }
+	  if (row < mtx[0][0].h - 1)
+		join_dots_in_col(mtx, row * mtx[0][0].scale, x * mtx[0][0].scale);
   }
+  join_dots_in_line(mtx, row, 0 * mtx[0][0].scale);
 }
 
 void	draw_struct(t_fdf **m_struct)
@@ -52,34 +64,11 @@ void	draw_struct(t_fdf **m_struct)
   int		row;
 
   row = 0;
-  while (m_struct[row])
+  while (row < m_struct[0][0].h)
   {
-    if (m_struct[row])
-       join_dots(m_struct, row);
+	 join_dots(m_struct, row);
      row++;
   }
-}
-
-void	fill_mtrx(t_fdf *tmp, int **line, t_fdf **matrix, int row)
-{
-	int		x;
-
-	x = 0;
-	while (x <= tmp->w - 1)
-	{
-		matrix[row][x].h = tmp->h;
-		matrix[row][x].w = tmp->w;
-
-		matrix[row][x].win_y = tmp->h * 21;
-		matrix[row][x].win_x = tmp->w * 21;
-
-		matrix[row][x].scale = tmp->scale;
-
-		matrix[row][x].x = x;
-		matrix[row][x].y = row;
-		matrix[row][x].z = line[row][x];
-		x++;
-	}
 }
 
 //
@@ -120,10 +109,38 @@ int		deal_key(int key, t_fdf **mtrx)
     free (mtrx);
     exit(0);
   }
+  if (key == 49)
+  {
+  //	printf("%d, %d\n", (int)mtrx[0][0].mlx_ptr, (int)mtrx[0][0].win_ptr);//check
+    mlx_clear_window(mtrx[0][0].mlx_ptr, mtrx[0][0].win_ptr);
+	//draw_3d_mtrx(mtrx);//new
+  }
   return (key);
 }
 
 //
+void	fill_mtrx(t_fdf *tmp, int **line, t_fdf **matrix, int row)
+{
+	int		x;
+
+	x = 0;
+	while (x <= tmp->w - 1)
+	{
+		matrix[row][x].h = tmp->h;
+		matrix[row][x].w = tmp->w;
+
+		matrix[row][x].win_y = tmp->h * 21;
+		matrix[row][x].win_x = tmp->w * 21;
+
+		matrix[row][x].scale = tmp->scale;
+
+		matrix[row][x].x = x;
+		matrix[row][x].y = row;
+		matrix[row][x].z = line[row][x];
+		x++;
+	}
+}
+
 t_fdf	**get_struct_mtrx(t_fdf *tmp, int **m_num)
 {
 	t_fdf	**mtrx;
@@ -144,61 +161,6 @@ t_fdf	**get_struct_mtrx(t_fdf *tmp, int **m_num)
 	//ft_strdel(mtrx);
 }
 
-int		**get_num_matrix(t_fdf *tmp, char *file)
-{
-	int		w;
-	int		h;
-	char	**line;
-	char	**ar;
-	int		**m;
-	int		row;
-	int		col;
-	int		fd;
-
-	w = 0;
-	h = 0;
-	line = (char **)ft_memalloc(sizeof(char *));
-	fd = open(file, O_RDONLY);
-	while (get_next_line(fd, line) > 0)
-	{
-		if (w == 0)
-		{
-			ar = ft_strsplit(*line, ' ');
-			while (ar[w])
-				w += 1;
-		}
-		h += 1;
-	}
-	printf("h = %d, w = %d\n", h, w);//check
-	tmp->w = w;
-	tmp->h = h;
-  tmp->scale = 20;
-	tmp->win_x = 21 * w;
-	tmp->win_y = 21 * h;
-	m = (int **)ft_memalloc(sizeof(int *) * (h + 1));
-	m[h] = NULL;
-	row = 0;
-	close(fd);
-	fd = open(file, O_RDONLY);
-	while (get_next_line(fd, line) > 0)
-	{
-		m[row] = (int *)ft_memalloc(sizeof(int) * w);
-		ar = ft_strsplit(*line, ' ');
-		col = 0;
-		while (ar[col])
-		{
-			m[row][col] = ft_atoi(ar[col]);
-			printf("%2d ", m[row][col]);
-			col += 1;
-		}
-		row += 1;
-		printf("\n");
-	}
-	close(fd);
-	ft_strdel(line);
-	return (m);
-}
-
 int		main(int argc, char **argv)
 {
 	int			**m_num;
@@ -213,10 +175,11 @@ int		main(int argc, char **argv)
 	m_num = get_num_matrix(&tmp, argv[1]);
 	m_struct = get_struct_mtrx(&tmp, m_num);
   m_struct[0][0].mlx_ptr = mlx_init();
-  m_struct[0][0].win_ptr = mlx_new_window(m_struct[0][0].mlx_ptr, m_struct[0][0].win_x, m_struct[0][0].win_y, argv[1]);//new
+  m_struct[0][0].win_ptr = mlx_new_window(m_struct[0][0].mlx_ptr, m_struct[0][0].win_x, m_struct[0][0].win_y, argv[1]);
   m_struct[0][0].shift_x = 1;
   m_struct[0][0].shift_y = 1;
   draw_struct(m_struct);
+ // printf("%d, %d\n", (int)m_struct[0][0].mlx_ptr, (int)m_struct[0][0].win_ptr);//check
   mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);
   mlx_loop(m_struct[0][0].mlx_ptr);
   return (0);

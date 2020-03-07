@@ -21,9 +21,12 @@ typedef	struct			s_fdf
 	int		scale;
   int   shift_x;
   int   shift_y;
+  int   shift_z;
 
 	void	*win_ptr;
 	void	*mlx_ptr;
 }						t_fdf;
+
+int		**get_num_matrix(t_fdf *tmp, char *file);
 
 # endif

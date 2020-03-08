@@ -56,18 +56,25 @@ void	join_dots(t_fdf **mtx, int row)
 	  if (row < mtx[0][0].h - 1)
 		join_dots_in_col(mtx, row * mtx[0][0].scale, x * mtx[0][0].scale);
   }
-  join_dots_in_line(mtx, row, 0 * mtx[0][0].scale);
 }
 
 void	draw_struct(t_fdf **m_struct)
 {
   int		row;
+  int		x;
 
   row = 0;
+  x = 0;
   while (row < m_struct[0][0].h)
   {
 	 join_dots(m_struct, row);
      row++;
+  }
+  row--;
+  while (x < m_struct[0][0].w - 1)
+  {
+  	join_dots_in_line(m_struct, row, x * m_struct[0][0].scale);
+	x++;
   }
 }
 

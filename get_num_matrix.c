@@ -22,6 +22,7 @@ int		**get_num_matrix(t_fdf *tmp, char *file)
 			ar = ft_strsplit(*line, ' ');
 			while (ar[w])
 				w += 1;
+      wipe_mstr(ar);
 		}
 		h += 1;
     ft_strdel(line);
@@ -41,6 +42,7 @@ int		**get_num_matrix(t_fdf *tmp, char *file)
 	{
 		m[row] = (int *)ft_memalloc(sizeof(int) * w);
 		ar = ft_strsplit(*line, ' ');
+    ft_strdel(line);
 		col = 0;
 		while (ar[col])
 		{
@@ -49,7 +51,8 @@ int		**get_num_matrix(t_fdf *tmp, char *file)
 			col += 1;
 		}
 		row += 1;
-		printf("\n");
+    printf("\n");
+    wipe_mstr(ar);
 	}
 	close(fd);
 	ft_strdel(line);

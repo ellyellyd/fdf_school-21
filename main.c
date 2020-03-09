@@ -1,6 +1,28 @@
 #include "fdf.h"
 #include "unistd.h"//check
 
+void  print_background(t_fdf **m)
+{
+  int   x;
+  int   y;
+
+  y = 0;
+  while (y <= m[0][0].win_y)
+  {
+    x = 0;
+    while (x <= m[0][0].win_x / 3)
+    {
+      mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, 0xF9C9FF);
+      x++;
+    }
+    while (x <= m[0][0].win_x)
+    {
+      mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, 0x363636);
+      x++;
+    }
+    y++;
+  }
+}
 void  set_param(t_fdf *a, t_fdf *b, t_fdf **m)
 {
   a->x *= m[0][0].scale;
@@ -117,6 +139,7 @@ int		deal_key(int key, t_fdf **mtrx)
   {
     mlx_clear_window(mtrx[0][0].mlx_ptr, mtrx[0][0].win_ptr);
     do_key(key, mtrx);
+    print_background(mtrx);
     //print menu
     draw_struct(mtrx);
   }
@@ -194,6 +217,7 @@ int		main(int argc, char **argv)
   m_struct[0][0].z_scale = 1;
   m_struct[0][0].angle = 0.523599;
   m_struct[0][0].is_iso = 0;
+  print_background(m_struct);
   draw_struct(m_struct);
  // printf("%d, %d\n", (int)m_struct[0][0].mlx_ptr, (int)m_struct[0][0].win_ptr);//check
   mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);

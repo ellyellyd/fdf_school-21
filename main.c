@@ -10,14 +10,25 @@ void  print_background(t_fdf **m)
   while (y <= m[0][0].win_y)
   {
     x = 0;
-    while (x <= m[0][0].win_x / 3)
+    if (m[0][0].menu == 1)
     {
-      mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, 0xF9C9FF);
-      x++;
+      while (x <= m[0][0].win_x / 4 || x <= 199)
+      {
+        mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, 0x9aacb8);
+        x++;
+      }
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 5, 0xb37c57, "move picture:");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 25, 0xb37c57, "use arrows(<- ->)");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 55, 0xb37c57, "zoom: + -");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 85, 0xb37c57, "change proection:");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 105, 0xb37c57, "space");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 135, 0xb37c57, "rase / low: U D");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 155, 0xb37c57, "hide / show menu:");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 175, 0xb37c57, "M");
     }
     while (x <= m[0][0].win_x)
     {
-      mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, 0x363636);
+      mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, 0x3c455c);
       x++;
     }
     y++;
@@ -63,8 +74,8 @@ void	draw_line_bres(t_fdf a, t_fdf b, t_fdf **m)
   max = (module(step_x) > module(step_y)) ? module(step_x) : module(step_y);
   step_x /= max;
   step_y /= max;
-  color = (b.z || a.z) ? 0xFFD8D9 : 0xB43864;
-  color = (b.z != a.z) ? 0xF25278 : color;
+  color = (b.z || a.z) ? 0xdde2e3 : 0xb37c57;
+  color = (b.z != a.z) ? 0x9aacb8 : color;
   while ((int)(a.x - b.x) || (int)(a.y - b.y))
   {
     mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, a.x, a.y, color);
@@ -116,12 +127,29 @@ void	do_key(int key, t_fdf **matrix)
     matrix[0][0].shift_y += 3;
   if (key == 126)
     matrix[0][0].shift_y -= 3;
-  if (key == 49)
+  if (key == 46 || key == 49)
   {
-    if (matrix[0][0].is_iso == 0)
-      matrix[0][0].is_iso = 1;
-    else
-      matrix[0][0].is_iso = 0;
+    if (key == 49)
+    {
+      if (matrix[0][0].is_iso == 0)
+        matrix[0][0].is_iso = 1;
+      else
+        matrix[0][0].is_iso = 0;
+    }
+    if (key == 46)
+    {
+      if (matrix[0][0].menu == 0)
+      {
+        matrix[0][0].menu = 1;
+        matrix[0][0].shift_x = matrix[0][0].win_x / 2;
+      }
+      else
+      {
+        matrix[0][0].menu = 0;
+        if (matrix[0][0].is_iso == 0)
+          matrix[0][0].shift_x = matrix[0][0].win_x / 3;
+      }
+    }
   }
 }
 
@@ -129,7 +157,7 @@ int		is_key(int key)
 {
   return (key == 32 || key == 24 || key == 27 ||\
       key == 124 || key == 123 || key == 126 ||\
-      key == 125 || key == 49 || key == 2);
+      key == 125 || key == 49 || key == 2 || key == 46);
 }
 
 int		deal_key(int key, t_fdf **mtrx)
@@ -202,6 +230,7 @@ int		main(int argc, char **argv)
 	int			**m_num;
 	t_fdf		tmp;
 	t_fdf		**m_struct;
+  int     i;
     
 	if (argc != 2)
 	{
@@ -217,10 +246,19 @@ int		main(int argc, char **argv)
   m_struct[0][0].z_scale = 1;
   m_struct[0][0].angle = 0.523599;
   m_struct[0][0].is_iso = 0;
+  m_struct[0][0].menu = 1;
   print_background(m_struct);
   draw_struct(m_struct);
  // printf("%d, %d\n", (int)m_struct[0][0].mlx_ptr, (int)m_struct[0][0].win_ptr);//check
   mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);
   mlx_loop(m_struct[0][0].mlx_ptr);
+  i = 0;
+  while(m_struct[i])
+  {
+    free(m_struct[i]);
+    m_struct[i] = NULL;
+    i++;
+  }
+  free(m_struct);
   return (0);
 } 

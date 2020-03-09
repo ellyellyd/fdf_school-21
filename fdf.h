@@ -21,6 +21,7 @@ typedef	struct			s_fdf
 	int		win_y;
   int   is_iso;
   double  angle;
+  int     menu;
 
 	int		scale;
   int   z_scale;

@@ -24,6 +24,7 @@ int		**get_num_matrix(t_fdf *tmp, char *file)
 				w += 1;
 		}
 		h += 1;
+    ft_strdel(line);
 	}
 	printf("h = %d, w = %d\n", h, w);//check
 	tmp->w = w;

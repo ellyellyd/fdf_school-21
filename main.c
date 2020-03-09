@@ -239,6 +239,15 @@ int		main(int argc, char **argv)
 	}
 	m_num = get_num_matrix(&tmp, argv[1]);
 	m_struct = get_struct_mtrx(&tmp, m_num);
+  i = 0;
+  while(m_num[i])
+  {
+    free(m_num[i]);
+    m_num[i] = NULL;
+    i++;
+  }
+  free(m_num);
+  m_num = NULL;
   m_struct[0][0].mlx_ptr = mlx_init();
   m_struct[0][0].win_ptr = mlx_new_window(m_struct[0][0].mlx_ptr, m_struct[0][0].win_x, m_struct[0][0].win_y, argv[1]);
   m_struct[0][0].shift_x = m_struct[0][0].win_x / 2;
@@ -260,5 +269,6 @@ int		main(int argc, char **argv)
     i++;
   }
   free(m_struct);
+  m_struct = NULL;
   return (0);
 } 

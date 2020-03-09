@@ -140,9 +140,11 @@ void	fill_mtrx(t_fdf *tmp, int **line, t_fdf **matrix, int row)
 		matrix[row][x].h = tmp->h;
 		matrix[row][x].w = tmp->w;
 
-		matrix[row][x].win_y = tmp->h * 21;
-		matrix[row][x].win_x = tmp->w * 21;
+		matrix[row][x].win_y = (tmp->h * 42 > 800) ? 700 : tmp->h * 42;
+		matrix[row][x].win_x = (tmp->w * 42 > 800) ? 1000 : tmp->w * 42;
 
+    while ((matrix[0][0].win_x / 2 < tmp->w * tmp->scale) || (matrix[0][0].win_y / 3 < tmp->h * tmp->scale))
+      tmp->scale--;
 		matrix[row][x].scale = tmp->scale;
 
 		matrix[row][x].x = x;
@@ -187,8 +189,8 @@ int		main(int argc, char **argv)
 	m_struct = get_struct_mtrx(&tmp, m_num);
   m_struct[0][0].mlx_ptr = mlx_init();
   m_struct[0][0].win_ptr = mlx_new_window(m_struct[0][0].mlx_ptr, m_struct[0][0].win_x, m_struct[0][0].win_y, argv[1]);
-  m_struct[0][0].shift_x = 1;
-  m_struct[0][0].shift_y = 1;
+  m_struct[0][0].shift_x = m_struct[0][0].win_x / 2;
+  m_struct[0][0].shift_y = m_struct[0][0].win_y / 3;
   m_struct[0][0].z_scale = 1;
   m_struct[0][0].angle = 0.523599;
   m_struct[0][0].is_iso = 0;

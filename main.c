@@ -258,7 +258,6 @@ int		main(int argc, char **argv)
   m_struct[0][0].menu = 1;
   print_background(m_struct);
   draw_struct(m_struct);
- // printf("%d, %d\n", (int)m_struct[0][0].mlx_ptr, (int)m_struct[0][0].win_ptr);//check
   mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);
   mlx_loop(m_struct[0][0].mlx_ptr);
   i = 0;

@@ -1,60 +1,55 @@
 #include "fdf.h"
 #include "unistd.h"//check
 
-/*
-void	draw_3d_mtrx(t_fdf **mtrx)
+void  set_param(t_fdf *a, t_fdf *b, t_fdf **m)
 {
-}
-*/
+  a->x *= m[0][0].scale;
+  a->y *= m[0][0].scale;
+  b->x *= m[0][0].scale;
+  b->y *= m[0][0].scale;
+  a->z *= m[0][0].z_scale;
+  b->z *= m[0][0].z_scale;
 
-void	join_dots_in_col(t_fdf **m, int row, int x)
-{
-  int		row2;
-
-  row2 = 0;
-  while (row2 < m[0][0].scale)
+  if (m[0][0].is_iso)
   {
-  //  printf("%d\n", m[0][0].scale);//check
-    mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x + m[0][0].shift_x, row + row2 + m[0][0].shift_y, m[0][0].color);
-    row2++;
+    a->x = (a->x - a->y) * cos(m[0][0].angle);
+    a->y = (a->x + a->y) * sin(m[0][0].angle) - a->z;
+    b->x = (b->x - b->y) * cos(m[0][0].angle);
+    b->y = (b->x + b->y) * sin(m[0][0].angle) - b->z;
   }
+  a->x += m[0][0].shift_x;
+  a->y += m[0][0].shift_y;
+  b->x += m[0][0].shift_x;
+  b->y += m[0][0].shift_y;
 }
 
-void	join_dots_in_line(t_fdf **m, int row, int x)
+int   module(float nb)
 {
-  int		x2;
-
-  x2 = 0;
-  while (x2 <= m[0][0].scale)
-  {
-    mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x + x2 + m[0][0].shift_x, (row * m[0][0].scale) + m[0][0].shift_y, m[0][0].color);
-    x2++;
-  }
+  return ((nb < 0) ? -nb : nb);
 }
 
-void	join_dots(t_fdf **mtx, int row)
+void	draw_line_bres(t_fdf a, t_fdf b, t_fdf **m)
 {
-  int		x;
+  float		step_x;
+  float   step_y;
+  float   max;
+  int     color;
 
-  x = 0;
-  if (row < mtx[0][0].h - 1)
+  set_param(&a, &b, m);
+  step_x = b.x - a.x;
+  step_y = b.y - a.y;
+  max = (module(step_x) > module(step_y)) ? module(step_x) : module(step_y);
+  step_x /= max;
+  step_y /= max;
+  color = (b.z || a.z) ? 0xFFD8D9 : 0xB43864;
+  color = (b.z != a.z) ? 0xF25278 : color;
+  while ((int)(a.x - b.x) || (int)(a.y - b.y))
   {
-	  while (x < mtx[0][0].w - 1)
-	  {
-		if (mtx[row][x].z != 0 || ((x + 1) < mtx[0][0].w && mtx[row][x + 1].z != 0))
-		  mtx[0][0].color = 0xFFD8D9;
-		else
-		  mtx[0][0].color = 0xB43864;
-		join_dots_in_line(mtx, row, x * mtx[0][0].scale);
-		if (mtx[row][x].z != 0 || (mtx[row + 1] && mtx[row + 1][x].z != 0))
-		  mtx[0][0].color = 0xFFD8D9;
-		else
-		  mtx[0][0].color = 0xB43864;
-		join_dots_in_col(mtx, row * mtx[0][0].scale, x * mtx[0][0].scale);
-		x++;
-	  }
-	  if (row < mtx[0][0].h - 1)
-		join_dots_in_col(mtx, row * mtx[0][0].scale, x * mtx[0][0].scale);
+    mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, a.x, a.y, color);
+    a.x += step_x;
+    a.y += step_y;
+    if (a.x > m[0][0].win_x || a.y > m[0][0].win_y || a.y < 0 || a.x < 0)
+      break;
   }
 }
 
@@ -64,23 +59,29 @@ void	draw_struct(t_fdf **m_struct)
   int		x;
 
   row = 0;
-  x = 0;
   while (row < m_struct[0][0].h)
   {
-	 join_dots(m_struct, row);
-     row++;
-  }
-  row--;
-  while (x < m_struct[0][0].w - 1)
-  {
-  	join_dots_in_line(m_struct, row, x * m_struct[0][0].scale);
-	x++;
+    x = 0;
+    while (x < m_struct[0][0].w - 1)
+    {
+      if (m_struct[row + 1])
+        draw_line_bres(m_struct[row][x], m_struct[row + 1][x], m_struct);
+      draw_line_bres(m_struct[row][x], m_struct[row][x + 1], m_struct);
+      x++;
+    }
+      if (m_struct[row + 1])
+        draw_line_bres(m_struct[row][x], m_struct[row + 1][x], m_struct);
+   row++;
   }
 }
 
 //
 void	do_key(int key, t_fdf **matrix)
 {
+  if (key == 2)
+    matrix[0][0].z_scale -= 1;
+  if (key == 32)
+    matrix[0][0].z_scale += 1;
   if (key == 24)
     matrix[0][0].scale += 1;
   if (key == 27)
@@ -93,11 +94,20 @@ void	do_key(int key, t_fdf **matrix)
     matrix[0][0].shift_y += 3;
   if (key == 126)
     matrix[0][0].shift_y -= 3;
+  if (key == 49)
+  {
+    if (matrix[0][0].is_iso == 0)
+      matrix[0][0].is_iso = 1;
+    else
+      matrix[0][0].is_iso = 0;
+  }
 }
 
 int		is_key(int key)
 {
-  return (key == 24 || key == 27 || key == 124 || key == 123 || key == 126 || key == 125);
+  return (key == 32 || key == 24 || key == 27 ||\
+      key == 124 || key == 123 || key == 126 ||\
+      key == 125 || key == 49 || key == 2);
 }
 
 int		deal_key(int key, t_fdf **mtrx)
@@ -115,12 +125,6 @@ int		deal_key(int key, t_fdf **mtrx)
     mlx_destroy_window(mtrx[0][0].mlx_ptr, mtrx[0][0].win_ptr);
     free (mtrx);
     exit(0);
-  }
-  if (key == 49)
-  {
-  //	printf("%d, %d\n", (int)mtrx[0][0].mlx_ptr, (int)mtrx[0][0].win_ptr);//check
-    mlx_clear_window(mtrx[0][0].mlx_ptr, mtrx[0][0].win_ptr);
-	//draw_3d_mtrx(mtrx);//new
   }
   return (key);
 }
@@ -185,6 +189,9 @@ int		main(int argc, char **argv)
   m_struct[0][0].win_ptr = mlx_new_window(m_struct[0][0].mlx_ptr, m_struct[0][0].win_x, m_struct[0][0].win_y, argv[1]);
   m_struct[0][0].shift_x = 1;
   m_struct[0][0].shift_y = 1;
+  m_struct[0][0].z_scale = 1;
+  m_struct[0][0].angle = 0.523599;
+  m_struct[0][0].is_iso = 0;
   draw_struct(m_struct);
  // printf("%d, %d\n", (int)m_struct[0][0].mlx_ptr, (int)m_struct[0][0].win_ptr);//check
   mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);

@@ -5,6 +5,7 @@ void  print_background(t_fdf **m)
 {
   int   x;
   int   y;
+  int	color;
 
   y = 0;
   while (y <= m[0][0].win_y)
@@ -12,26 +13,37 @@ void  print_background(t_fdf **m)
     x = 0;
     if (m[0][0].menu == 1)
     {
+		if (m[0][0].back == 1)
+			color = 0x9aacb8;
+		else
+			color = 0x516c97;
       while (x <= m[0][0].win_x / 4 || x <= 199)
       {
-        mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, 0x9aacb8);
+        mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, color);
         x++;
       }
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 5, 0xb37c57, "move picture:");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 25, 0xb37c57, "use arrows(<- ->)");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 55, 0xb37c57, "zoom: + -");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 85, 0xb37c57, "change proection:");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 105, 0xb37c57, "space");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 135, 0xb37c57, "rase / low: U D");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 155, 0xb37c57, "hide / show menu:");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 175, 0xb37c57, "M");
+		if (m[0][0].back == 1)
+			color = 0xb37c57;
+		else
+			color = 0x9f94f0;
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 5, color, "move picture:");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 25, color, "use arrows(<- ->)");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 55, color, "zoom: + -");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 85, color, "change proection:");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 105, color, "space");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 135, color, "rase / low: U D");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 155, color, "hide / show menu:");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 175, color, "M");
     }
-    while (x <= m[0][0].win_x)
-    {
-      mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, 0x3c455c);
-      x++;
-    }
-    y++;
+	if (m[0][0].back == 1)
+	{
+    	while (x <= m[0][0].win_x)
+    	{
+      		mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, 0x3c455c);
+      		x++;
+    	}
+	}
+   	 y++;
   }
 }
 void  set_param(t_fdf *a, t_fdf *b, t_fdf **m)
@@ -74,8 +86,16 @@ void	draw_line_bres(t_fdf a, t_fdf b, t_fdf **m)
   max = (module(step_x) > module(step_y)) ? module(step_x) : module(step_y);
   step_x /= max;
   step_y /= max;
-  color = (b.z || a.z) ? 0xdde2e3 : 0xb37c57;
-  color = (b.z != a.z) ? 0x9aacb8 : color;
+  if (m[0][0].back == 0)
+  {
+	  color = (b.z || a.z) ? 0xe1d9fc : 0x658f9b;
+	  color = (b.z != a.z) ? 0xf9f1fd : color;
+  }
+  else
+  {
+	  color = (b.z || a.z) ? 0xdde2e3 : 0xb37c57;
+	  color = (b.z != a.z) ? 0x9aacb8 : color;
+  }
   while ((int)(a.x - b.x) || (int)(a.y - b.y))
   {
     mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, a.x, a.y, color);
@@ -111,6 +131,14 @@ void	draw_struct(t_fdf **m_struct)
 //
 void	do_key(int key, t_fdf **matrix)
 {
+	if (key == 11)
+	{
+		if (matrix[0][0].back == 0)
+			matrix[0][0].back = 1;
+		else
+			matrix[0][0].back = 0;
+	}
+		else
   if (key == 2)
     matrix[0][0].z_scale -= 1;
   if (key == 32)
@@ -157,7 +185,7 @@ int		is_key(int key)
 {
   return (key == 32 || key == 24 || key == 27 ||\
       key == 124 || key == 123 || key == 126 ||\
-      key == 125 || key == 49 || key == 2 || key == 46);
+      key == 125 || key == 49 || key == 2 || key == 46 || key == 11);
 }
 
 int		deal_key(int key, t_fdf **mtrx)
@@ -188,15 +216,15 @@ void	fill_mtrx(t_fdf *tmp, int **line, t_fdf **matrix, int row)
 	x = 0;
 	while (x <= tmp->w - 1)
 	{
-		matrix[row][x].h = tmp->h;
-		matrix[row][x].w = tmp->w;
+		matrix[0][0].h = tmp->h;
+		matrix[0][0].w = tmp->w;
 
-		matrix[row][x].win_y = (tmp->h * 42 > 800) ? 700 : tmp->h * 42;
-		matrix[row][x].win_x = (tmp->w * 42 > 800) ? 1000 : tmp->w * 42;
+		matrix[0][0].win_y = (tmp->h * 42 > 800) ? 700 : tmp->h * 42;
+		matrix[0][0].win_x = (tmp->w * 42 > 800) ? 1000 : tmp->w * 42;
 
     while ((matrix[0][0].win_x / 2 < tmp->w * tmp->scale) || (matrix[0][0].win_y / 3 < tmp->h * tmp->scale))
       tmp->scale--;
-		matrix[row][x].scale = tmp->scale;
+		matrix[0][0].scale = tmp->scale;
 
 		matrix[row][x].x = x;
 		matrix[row][x].y = row;
@@ -222,7 +250,6 @@ t_fdf	**get_struct_mtrx(t_fdf *tmp, int **m_num)
 		row++;
 	}
 	return (mtrx);
-	//ft_strdel(mtrx);
 }
 
 int		main(int argc, char **argv)
@@ -256,6 +283,7 @@ int		main(int argc, char **argv)
   m_struct[0][0].angle = 0.523599;
   m_struct[0][0].is_iso = 0;
   m_struct[0][0].menu = 1;
+  m_struct[0][0].back = 0;
   print_background(m_struct);
   draw_struct(m_struct);
   mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);

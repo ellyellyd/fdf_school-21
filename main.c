@@ -1,6 +1,13 @@
 #include "fdf.h"
 #include "unistd.h"//check
 
+void	set_default(t_fdf **m)
+{
+  m[0][0].z_scale = 1;
+  m[0][0].angle = 0.523599;
+  m[0][0].scale = m[0][0].scale_default;
+}
+
 void  print_background(t_fdf **m)
 {
   int   x;
@@ -34,6 +41,9 @@ void  print_background(t_fdf **m)
       mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 135, color, "rase / low: U D");
       mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 155, color, "hide / show menu:");
       mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 175, color, "M");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 205, color, "change colors: B");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 225, color, "set default pic: R");
+      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 255, color, "rotate: T S");
     }
 	if (m[0][0].back == 1)
 	{
@@ -138,7 +148,6 @@ void	do_key(int key, t_fdf **matrix)
 		else
 			matrix[0][0].back = 0;
 	}
-		else
   if (key == 2)
     matrix[0][0].z_scale -= 1;
   if (key == 32)
@@ -147,13 +156,13 @@ void	do_key(int key, t_fdf **matrix)
     matrix[0][0].scale += 1;
   if (key == 27)
     matrix[0][0].scale -= 1;
-  if (key == 124)
+  if (key == 124 && matrix[0][0].win_x >= matrix[0][0].shift_x + 3)
     matrix[0][0].shift_x += 3;
-  if (key == 123)
+  if (key == 123 &&  matrix[0][0].shift_x - 3 > 0)
     matrix[0][0].shift_x -= 3;
-  if (key == 125)
+  if (key == 125 && matrix[0][0].win_y >= matrix[0][0].shift_y + 3)
     matrix[0][0].shift_y += 3;
-  if (key == 126)
+  if (key == 126 && matrix[0][0].shift_y - 3 > 0)
     matrix[0][0].shift_y -= 3;
   if (key == 46 || key == 49)
   {
@@ -179,13 +188,21 @@ void	do_key(int key, t_fdf **matrix)
       }
     }
   }
+  if (key == 15)
+	  set_default(matrix);
+  if (key == 17)
+    matrix[0][0].angle += 0.1;
+  if (key == 1)
+    matrix[0][0].angle -= 0.1;
 }
 
 int		is_key(int key)
 {
   return (key == 32 || key == 24 || key == 27 ||\
       key == 124 || key == 123 || key == 126 ||\
-      key == 125 || key == 49 || key == 2 || key == 46 || key == 11);
+      key == 125 || key == 49 || key == 2 ||\
+	  key == 46 || key == 11 || key == 15 ||\
+	  key == 17 || key == 1);
 }
 
 int		deal_key(int key, t_fdf **mtrx)
@@ -241,14 +258,6 @@ t_fdf	**get_struct_mtrx(t_fdf *tmp, int **m_num)
 	return (mtrx);
 }
 
-void	set_default(t_fdf **m)
-{
-  m[0][0].z_scale = 1;
-  m[0][0].angle = 0.523599;
-  m[0][0].is_iso = 0;
-  m[0][0].back = 0;
-  m[0][0].scale = m[0][0].scale_default;
-}
 
 int		main(int argc, char **argv)
 {
@@ -289,6 +298,8 @@ int		main(int argc, char **argv)
   m_struct[0][0].shift_y = m_struct[0][0].win_y / 3;
 
   m_struct[0][0].menu = 1;
+  m_struct[0][0].is_iso = 0;
+  m_struct[0][0].back = 0;
 
   set_default(m_struct);//new
 

@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:44:58 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/10 21:16:01 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/10 22:26:30 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,9 @@ void	do_key(int key, t_fdf **matrix)
 		else
 			matrix[0][0].back = 0;
 	}
-  if (key == 2)
+  if (key == 2 && matrix[0][0].z_scale > (-1) * (matrix[0][0].win_y / matrix[0][0].scale))
     matrix[0][0].z_scale -= 1;
-  if (key == 32)
+  if (key == 32 && matrix[0][0].z_scale < matrix[0][0].win_y / matrix[0][0].scale)
     matrix[0][0].z_scale += 1;
   if (key == 24)
     matrix[0][0].scale += 1;

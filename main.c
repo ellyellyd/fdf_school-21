@@ -6,12 +6,12 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:44:58 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/10 22:39:55 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/10 23:55:51 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
+/*
 void	set_default(t_fdf **m)
 {
   m[0][0].z_scale = 1;
@@ -42,7 +42,7 @@ void  set_param(t_fdf *a, t_fdf *b, t_fdf **m)
   b->x += m[0][0].shift_x;
   b->y += m[0][0].shift_y;
 }
-
+*/
 int   module(float nb)
 {
   return ((nb < 0) ? -nb : nb);
@@ -245,34 +245,10 @@ void	set_start_param(t_fdf **m_struct, t_fdf tmp, char **argv)
   	set_default(m_struct);
 }
 
-int		main(int argc, char **argv)
+void	free_m_struct(t_fdf **m_struct)
 {
-	int			**m_num;
-	t_fdf		tmp;
-	t_fdf		**m_struct;
   int     i;
-    
-	if (argc != 2)
-	{
-	 	ft_putstr("usage: ./fdf map.fdf\n");
-	 	return (0);
-	}
-	m_num = get_num_matrix(&tmp, argv[1]);
-	m_struct = get_struct_mtrx(&tmp, m_num);
-  i = 0;
-  while(m_num[i])
-  {
-    free(m_num[i]);
-    m_num[i] = NULL;
-    i++;
-  }
-  free(m_num);
-  m_num = NULL;
-  set_start_param(m_struct, tmp, argv);
-  print_background(m_struct);
-  draw_struct(m_struct);
-  mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);
-  mlx_loop(m_struct[0][0].mlx_ptr);
+
   i = 0;
   while(m_struct[i])
   {
@@ -282,5 +258,42 @@ int		main(int argc, char **argv)
   }
   free(m_struct);
   m_struct = NULL;
-  return (0);
+}
+
+void	free_m_num(int **m_num)
+{
+  int     i;
+
+  i = 0;
+  while(m_num[i])
+  {
+    free(m_num[i]);
+    m_num[i] = NULL;
+    i++;
+  }
+  free(m_num);
+  m_num = NULL;
+}
+
+int		main(int argc, char **argv)
+{
+	int			**m_num;
+	t_fdf		tmp;
+	t_fdf		**m_struct;
+    
+	if (argc != 2)
+	{
+	 	ft_putstr("usage: ./fdf map.fdf\n");
+	 	return (0);
+	}
+	m_num = get_num_matrix(&tmp, argv[1]);
+	m_struct = get_struct_mtrx(&tmp, m_num);
+	free_m_num(m_num);
+	set_start_param(m_struct, tmp, argv);
+	print_background(m_struct);
+	draw_struct(m_struct);
+	mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);
+	mlx_loop(m_struct[0][0].mlx_ptr);
+	free_m_struct(m_struct);
+	return (0);
 } 

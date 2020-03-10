@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:45:20 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/10 20:52:40 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/11 00:00:47 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,7 @@ typedef	struct			s_fdf
 
 int		**get_num_matrix(t_fdf *tmp, char *file);
 void	print_background(t_fdf **m);
+void	set_default(t_fdf **m);
+void	set_param(t_fdf *a, t_fdf *b, t_fdf **m);
 
 # endif

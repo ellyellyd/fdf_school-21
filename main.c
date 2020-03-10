@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:44:58 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/10 22:26:30 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/10 22:39:55 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,27 @@ t_fdf	**get_struct_mtrx(t_fdf *tmp, int **m_num)
 	return (mtrx);
 }
 
+void	set_start_param(t_fdf **m_struct, t_fdf tmp, char **argv)
+{
+	m_struct[0][0].h = tmp.h;
+	m_struct[0][0].w = tmp.w;
+
+	m_struct[0][0].win_y = (tmp.h * 42 > 800) ? 700 : tmp.h * 42;
+	m_struct[0][0].win_x = (tmp.w * 42 > 800) ? 1000 : tmp.w * 42;
+
+	while ((m_struct[0][0].win_x / 2 < tmp.w * tmp.scale) || (m_struct[0][0].win_y / 3 < tmp.h * tmp.scale))
+		tmp.scale--;
+	m_struct[0][0].scale_default = tmp.scale;
+
+  	m_struct[0][0].mlx_ptr = mlx_init();
+  	m_struct[0][0].win_ptr = mlx_new_window(m_struct[0][0].mlx_ptr, m_struct[0][0].win_x, m_struct[0][0].win_y, argv[1]);
+
+  	m_struct[0][0].menu = 1;
+  	m_struct[0][0].is_iso = 0;
+  	m_struct[0][0].back = 0;
+
+  	set_default(m_struct);
+}
 
 int		main(int argc, char **argv)
 {
@@ -247,25 +268,7 @@ int		main(int argc, char **argv)
   }
   free(m_num);
   m_num = NULL;
-	m_struct[0][0].h = tmp.h;
-	m_struct[0][0].w = tmp.w;
-
-	m_struct[0][0].win_y = (tmp.h * 42 > 800) ? 700 : tmp.h * 42;
-	m_struct[0][0].win_x = (tmp.w * 42 > 800) ? 1000 : tmp.w * 42;
-
-	while ((m_struct[0][0].win_x / 2 < tmp.w * tmp.scale) || (m_struct[0][0].win_y / 3 < tmp.h * tmp.scale))
-		tmp.scale--;
-	m_struct[0][0].scale_default = tmp.scale;
-
-  m_struct[0][0].mlx_ptr = mlx_init();
-  m_struct[0][0].win_ptr = mlx_new_window(m_struct[0][0].mlx_ptr, m_struct[0][0].win_x, m_struct[0][0].win_y, argv[1]);
-
-  m_struct[0][0].menu = 1;
-  m_struct[0][0].is_iso = 0;
-  m_struct[0][0].back = 0;
-
-  set_default(m_struct);//new
-
+  set_start_param(m_struct, tmp, argv);
   print_background(m_struct);
   draw_struct(m_struct);
   mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);

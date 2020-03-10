@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:44:58 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/10 20:52:14 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/10 21:16:01 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	set_default(t_fdf **m)
   m[0][0].z_scale = 1;
   m[0][0].angle = 0.523599;
   m[0][0].scale = m[0][0].scale_default;
+  m[0][0].shift_x = m[0][0].win_x / 2;
+  m[0][0].shift_y = m[0][0].win_y / 3;
 }
 
 void  set_param(t_fdf *a, t_fdf *b, t_fdf **m)
@@ -257,8 +259,6 @@ int		main(int argc, char **argv)
 
   m_struct[0][0].mlx_ptr = mlx_init();
   m_struct[0][0].win_ptr = mlx_new_window(m_struct[0][0].mlx_ptr, m_struct[0][0].win_x, m_struct[0][0].win_y, argv[1]);
-  m_struct[0][0].shift_x = m_struct[0][0].win_x / 2;
-  m_struct[0][0].shift_y = m_struct[0][0].win_y / 3;
 
   m_struct[0][0].menu = 1;
   m_struct[0][0].is_iso = 0;

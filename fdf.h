@@ -25,6 +25,7 @@ typedef	struct			s_fdf
   int	back;
 
 	int		scale;
+	int		scale_default;
   int   z_scale;
   int   shift_x;
   int   shift_y;

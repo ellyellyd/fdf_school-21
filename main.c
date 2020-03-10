@@ -196,7 +196,6 @@ int		deal_key(int key, t_fdf **mtrx)
     mlx_clear_window(mtrx[0][0].mlx_ptr, mtrx[0][0].win_ptr);
     do_key(key, mtrx);
     print_background(mtrx);
-    //print menu
     draw_struct(mtrx);
   }
   if (key == 53)
@@ -216,16 +215,6 @@ void	fill_mtrx(t_fdf *tmp, int **line, t_fdf **matrix, int row)
 	x = 0;
 	while (x <= tmp->w - 1)
 	{
-		matrix[0][0].h = tmp->h;
-		matrix[0][0].w = tmp->w;
-
-		matrix[0][0].win_y = (tmp->h * 42 > 800) ? 700 : tmp->h * 42;
-		matrix[0][0].win_x = (tmp->w * 42 > 800) ? 1000 : tmp->w * 42;
-
-    while ((matrix[0][0].win_x / 2 < tmp->w * tmp->scale) || (matrix[0][0].win_y / 3 < tmp->h * tmp->scale))
-      tmp->scale--;
-		matrix[0][0].scale = tmp->scale;
-
 		matrix[row][x].x = x;
 		matrix[row][x].y = row;
 		matrix[row][x].z = line[row][x];
@@ -252,6 +241,15 @@ t_fdf	**get_struct_mtrx(t_fdf *tmp, int **m_num)
 	return (mtrx);
 }
 
+void	set_default(t_fdf **m)
+{
+  m[0][0].z_scale = 1;
+  m[0][0].angle = 0.523599;
+  m[0][0].is_iso = 0;
+  m[0][0].back = 0;
+  m[0][0].scale = m[0][0].scale_default;
+}
+
 int		main(int argc, char **argv)
 {
 	int			**m_num;
@@ -275,15 +273,25 @@ int		main(int argc, char **argv)
   }
   free(m_num);
   m_num = NULL;
+	m_struct[0][0].h = tmp.h;
+	m_struct[0][0].w = tmp.w;
+
+	m_struct[0][0].win_y = (tmp.h * 42 > 800) ? 700 : tmp.h * 42;
+	m_struct[0][0].win_x = (tmp.w * 42 > 800) ? 1000 : tmp.w * 42;
+
+	while ((m_struct[0][0].win_x / 2 < tmp.w * tmp.scale) || (m_struct[0][0].win_y / 3 < tmp.h * tmp.scale))
+		tmp.scale--;
+	m_struct[0][0].scale_default = tmp.scale;
+
   m_struct[0][0].mlx_ptr = mlx_init();
   m_struct[0][0].win_ptr = mlx_new_window(m_struct[0][0].mlx_ptr, m_struct[0][0].win_x, m_struct[0][0].win_y, argv[1]);
   m_struct[0][0].shift_x = m_struct[0][0].win_x / 2;
   m_struct[0][0].shift_y = m_struct[0][0].win_y / 3;
-  m_struct[0][0].z_scale = 1;
-  m_struct[0][0].angle = 0.523599;
-  m_struct[0][0].is_iso = 0;
+
   m_struct[0][0].menu = 1;
-  m_struct[0][0].back = 0;
+
+  set_default(m_struct);//new
+
   print_background(m_struct);
   draw_struct(m_struct);
   mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);

@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/03/10 20:44:58 by fcatina           #+#    #+#             */
+/*   Updated: 2020/03/10 20:52:14 by fcatina          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
-#include "unistd.h"//check
 
 void	set_default(t_fdf **m)
 {
@@ -8,54 +19,6 @@ void	set_default(t_fdf **m)
   m[0][0].scale = m[0][0].scale_default;
 }
 
-void  print_background(t_fdf **m)
-{
-  int   x;
-  int   y;
-  int	color;
-
-  y = 0;
-  while (y <= m[0][0].win_y)
-  {
-    x = 0;
-    if (m[0][0].menu == 1)
-    {
-		if (m[0][0].back == 1)
-			color = 0x9aacb8;
-		else
-			color = 0x516c97;
-      while (x <= m[0][0].win_x / 4 || x <= 199)
-      {
-        mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, color);
-        x++;
-      }
-		if (m[0][0].back == 1)
-			color = 0xb37c57;
-		else
-			color = 0x9f94f0;
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 5, color, "move picture:");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 25, color, "use arrows(<- ->)");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 55, color, "zoom: + -");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 85, color, "change proection:");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 105, color, "space");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 135, color, "rase / low: U D");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 155, color, "hide / show menu:");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 175, color, "M");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 205, color, "change colors: B");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 225, color, "set default pic: R");
-      mlx_string_put(m[0][0].mlx_ptr, m[0][0].win_ptr, 10, 255, color, "rotate: T S");
-    }
-	if (m[0][0].back == 1)
-	{
-    	while (x <= m[0][0].win_x)
-    	{
-      		mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, x, y, 0x3c455c);
-      		x++;
-    	}
-	}
-   	 y++;
-  }
-}
 void  set_param(t_fdf *a, t_fdf *b, t_fdf **m)
 {
   a->x *= m[0][0].scale;

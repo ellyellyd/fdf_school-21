@@ -6,11 +6,28 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 00:10:56 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/12 00:41:09 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/12 00:45:45 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+int		get_color(t_fdf **m, t_fdf a, t_fdf b)
+{
+	int		color;
+
+	if (m[0][0].back == 0)
+	{
+		color = (b.z || a.z) ? 0xe1d9fc : 0x658f9b;
+		color = (b.z != a.z) ? 0xf9f1fd : color;
+	}
+	else
+	{
+		color = (b.z || a.z) ? 0xdde2e3 : 0xb37c57;
+		color = (b.z != a.z) ? 0x9aacb8 : color;
+	}
+	return (color);
+}
 
 int		module(float nb)
 {
@@ -30,16 +47,7 @@ void	draw_line_bres(t_fdf a, t_fdf b, t_fdf **m)
 	max = (module(step_x) > module(step_y)) ? module(step_x) : module(step_y);
 	step_x /= max;
 	step_y /= max;
-	if (m[0][0].back == 0)
-	{
-		color = (b.z || a.z) ? 0xe1d9fc : 0x658f9b;
-		color = (b.z != a.z) ? 0xf9f1fd : color;
-	}
-	else
-	{
-		color = (b.z || a.z) ? 0xdde2e3 : 0xb37c57;
-		color = (b.z != a.z) ? 0x9aacb8 : color;
-	}
+	color = get_color(m, a, b);
 	while ((int)(a.x - b.x) || (int)(a.y - b.y))
 	{
 		mlx_pixel_put(m[0][0].mlx_ptr, m[0][0].win_ptr, a.x, a.y, color);

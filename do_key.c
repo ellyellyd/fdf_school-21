@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 00:32:30 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/11 05:34:11 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/12 00:35:55 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,17 @@ void	do_key_2(int key, t_fdf **m)
 				m[0][0].shift_x = m[0][0].win_x / 3;
 		}
 	}
+	if (key == 11)
+	{
+		if (m[0][0].back == 0)
+			m[0][0].back = 1;
+		else
+			m[0][0].back = 0;
+	}
 }
 
 void	do_key(int key, t_fdf **m)
 {
-	if (key == 11)
-    m[0][0].back = 0 ? m[0][0].back == 1 : m[0][0].back == 0;
 	if (key == 2 && m[0][0].z_scale > (-1) * (m[0][0].win_y / m[0][0].scale))
 		m[0][0].z_scale -= 1;
 	if (key == 32 && m[0][0].z_scale < m[0][0].win_y / m[0][0].scale)
@@ -46,7 +51,7 @@ void	do_key(int key, t_fdf **m)
 		m[0][0].scale -= 1;
 	if (key == 124 && m[0][0].win_x >= m[0][0].shift_x + 3)
 		m[0][0].shift_x += 3;
-	if (key == 123 &&  m[0][0].shift_x - 3 > 0)
+	if (key == 123 && m[0][0].shift_x - 3 > 0)
 		m[0][0].shift_x -= 3;
 	if (key == 125 && m[0][0].win_y >= m[0][0].shift_y + 3)
 		m[0][0].shift_y += 3;
@@ -58,6 +63,6 @@ void	do_key(int key, t_fdf **m)
 		m[0][0].angle += 0.1;
 	if (key == 1)
 		m[0][0].angle -= 0.1;
-	if (key == 46 || key == 49)
-    do_key_2(key, m);
+	if (key == 46 || key == 49 || key == 11)
+		do_key_2(key, m);
 }

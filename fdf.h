@@ -55,5 +55,6 @@ void	draw_struct(t_fdf **m_struct);
 void	do_key(int key, t_fdf **matrix);
 void	free_m_struct(t_fdf **m_struct);
 void	free_m_num(int **m_num);
+t_fdf	**get_struct_mtrx(t_fdf *tmp, int **m_num);
 
 # endif

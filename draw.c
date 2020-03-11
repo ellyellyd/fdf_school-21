@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 00:10:56 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/11 00:14:01 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/12 00:41:09 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ int		module(float nb)
 
 void	draw_line_bres(t_fdf a, t_fdf b, t_fdf **m)
 {
-	float		step_x;
-	float   step_y;
-	float   max;
-	int     color;
+	float	step_x;
+	float	step_y;
+	float	max;
+	int		color;
 
 	set_param(&a, &b, m);
 	step_x = b.x - a.x;
@@ -46,29 +46,28 @@ void	draw_line_bres(t_fdf a, t_fdf b, t_fdf **m)
 		a.x += step_x;
 		a.y += step_y;
 		if (a.x > m[0][0].win_x || a.y > m[0][0].win_y || a.y < 0 || a.x < 0)
-			break;
+			break ;
 	}
 }
 
-void	draw_struct(t_fdf **m_struct)
+void	draw_struct(t_fdf **m)
 {
 	int		row;
 	int		x;
 
 	row = 0;
-	while (row < m_struct[0][0].h)
+	while (row < m[0][0].h)
 	{
 		x = 0;
-		while (x < m_struct[0][0].w - 1)
+		while (x < m[0][0].w - 1)
 		{
-			if (m_struct[row + 1])
-				draw_line_bres(m_struct[row][x], m_struct[row + 1][x], m_struct);
-			draw_line_bres(m_struct[row][x], m_struct[row][x + 1], m_struct);
+			if (m[row + 1])
+				draw_line_bres(m[row][x], m[row + 1][x], m);
+			draw_line_bres(m[row][x], m[row][x + 1], m);
 			x++;
 		}
-		if (m_struct[row + 1])
-			draw_line_bres(m_struct[row][x], m_struct[row + 1][x], m_struct);
+		if (m[row + 1])
+			draw_line_bres(m[row][x], m[row + 1][x], m);
 		row++;
 	}
 }
-

@@ -53,5 +53,7 @@ void	set_param(t_fdf *a, t_fdf *b, t_fdf **m);
 void	set_start_param(t_fdf **m_struct, t_fdf tmp, char **argv);
 void	draw_struct(t_fdf **m_struct);
 void	do_key(int key, t_fdf **matrix);
+void	free_m_struct(t_fdf **m_struct);
+void	free_m_num(int **m_num);
 
 # endif

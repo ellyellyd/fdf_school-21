@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:44:58 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/11 00:35:43 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/11 04:46:57 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,42 +74,12 @@ t_fdf	**get_struct_mtrx(t_fdf *tmp, int **m_num)
 	return (mtrx);
 }
 
-void	free_m_struct(t_fdf **m_struct)
-{
-  int     i;
-
-  i = 0;
-  while(m_struct[i])
-  {
-    free(m_struct[i]);
-    m_struct[i] = NULL;
-    i++;
-  }
-  free(m_struct);
-  m_struct = NULL;
-}
-
-void	free_m_num(int **m_num)
-{
-  int     i;
-
-  i = 0;
-  while(m_num[i])
-  {
-    free(m_num[i]);
-    m_num[i] = NULL;
-    i++;
-  }
-  free(m_num);
-  m_num = NULL;
-}
-
 int		main(int argc, char **argv)
 {
 	int			**m_num;
 	t_fdf		tmp;
 	t_fdf		**m_struct;
-    
+
 	if (argc != 2)
 	{
 	 	ft_putstr("usage: ./fdf map.fdf\n");
@@ -125,4 +95,4 @@ int		main(int argc, char **argv)
 	mlx_loop(m_struct[0][0].mlx_ptr);
 	free_m_struct(m_struct);
 	return (0);
-} 
+}

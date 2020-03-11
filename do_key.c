@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 00:32:30 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/11 04:36:27 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/11 05:34:11 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 void	do_key_2(int key, t_fdf **m)
 {
-  if (key == 49)
-    m[0][0].is_iso = 0 ? m[0][0].is_iso == 1 : m[0][0].is_iso == 0;
-  if (key == 46)
-    {
-      if (m[0][0].menu == 0)
-        {
-          m[0][0].menu = 1;
-          m[0][0].shift_x = m[0][0].win_x / 2;
-        }
-      else
-        {
-          m[0][0].menu = 0;
-          if (m[0][0].is_iso == 0)
-            m[0][0].shift_x = m[0][0].win_x / 3;
-        }
-    }
+	if (key == 49)
+		m[0][0].is_iso = 0 ? m[0][0].is_iso == 1 : m[0][0].is_iso == 0;
+	if (key == 46)
+	{
+		if (m[0][0].menu == 0)
+		{
+			m[0][0].menu = 1;
+			m[0][0].shift_x = m[0][0].win_x / 2;
+		}
+		else
+		{
+			m[0][0].menu = 0;
+			if (m[0][0].is_iso == 0)
+				m[0][0].shift_x = m[0][0].win_x / 3;
+		}
+	}
 }
 
 void	do_key(int key, t_fdf **m)

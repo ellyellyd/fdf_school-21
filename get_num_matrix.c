@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:45:31 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/10 22:09:15 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/12 00:59:26 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,22 @@ int		**fill_num_matrix(t_fdf *tmp, char **ar, int **m, char *file)
 	{
 		m[row] = (int *)ft_memalloc(sizeof(int) * tmp->w);
 		ar = ft_strsplit(*line, ' ');
-    	ft_strdel(line);
+		ft_strdel(line);
 		col = 0;
 		while (ar[col])
 		{
 			m[row][col] = ft_atoi(ar[col]);
-			printf("%2d ", m[row][col]);
 			col += 1;
 		}
 		row += 1;
-    	printf("\n");
-    	wipe_mstr(ar);
+		wipe_mstr(ar);
 	}
 	close(fd);
 	ft_strdel(line);
 	return (m);
 }
 
-void		get_width_and_heigth(t_fdf *tmp, char **ar, char *file)
+void	get_width_and_heigth(t_fdf *tmp, char **ar, char *file)
 {
 	int		w;
 	int		h;
@@ -61,12 +59,11 @@ void		get_width_and_heigth(t_fdf *tmp, char **ar, char *file)
 			ar = ft_strsplit(*line, ' ');
 			while (ar[w])
 				w += 1;
-      wipe_mstr(ar);
+			wipe_mstr(ar);
 		}
 		h += 1;
-    ft_strdel(line);
+		ft_strdel(line);
 	}
-	printf("h = %d, w = %d\n", h, w);//check
 	tmp->w = w;
 	tmp->h = h;
 	close(fd);
@@ -80,7 +77,7 @@ int		**get_num_matrix(t_fdf *tmp, char *file)
 
 	ar = NULL;
 	get_width_and_heigth(tmp, ar, file);
-  	tmp->scale = 20;
+	tmp->scale = 20;
 	tmp->win_x = 21 * tmp->w;
 	tmp->win_y = 21 * tmp->h;
 	m = (int **)ft_memalloc(sizeof(int *) * (tmp->h + 1));

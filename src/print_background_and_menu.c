@@ -75,10 +75,7 @@ void	print_background(t_fdf **m)
 	{
 		x = 0;
 		if (m[0][0].menu == 1)
-		{
 			print_back_menu(m, &x, &y, &color);
-			print_menu(m);
-		}
 		if (m[0][0].back == 1)
 		{
 			while (x <= m[0][0].win_x)
@@ -89,4 +86,6 @@ void	print_background(t_fdf **m)
 		}
 		y++;
 	}
+  if (m[0][0].menu == 1)
+			print_menu(m);
 }

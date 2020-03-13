@@ -45,9 +45,9 @@ void	do_key(int key, t_fdf **m)
 		m[0][0].z_scale -= 1;
 	if (key == 32 && m[0][0].z_scale < m[0][0].win_y / m[0][0].scale)
 		m[0][0].z_scale += 1;
-	if (key == 24)
+	if (key == 24 && m[0][0].scale < 100)
 		m[0][0].scale += 1;
-	if (key == 27)
+	if (key == 27 && m[0][0].scale > 100)
 		m[0][0].scale -= 1;
 	if (key == 124 && m[0][0].win_x >= m[0][0].shift_x + 3)
 		m[0][0].shift_x += 3;

@@ -50,21 +50,22 @@ void	get_width_and_heigth(t_fdf *tmp, char **ar, char *file)
 
 	w = 0;
 	h = 0;
+  tmp->w = 0;
 	line = (char **)ft_memalloc(sizeof(char *));
 	fd = open(file, O_RDONLY);
 	while (get_next_line(fd, line) > 0)
 	{
-		if (w == 0)
-		{
-			ar = ft_strsplit(*line, ' ');
-			while (ar[w])
-				w += 1;
-			wipe_mstr(ar);
-		}
-		h += 1;
-		ft_strdel(line);
+    ar = ft_strsplit(*line, ' ');
+    while (ar[w])
+      w += 1;
+    if (tmp->w == 0)
+      tmp->w = w;
+    if (tmp->w != w)
+      exit (1);
+    ft_strdel(line);
+    wipe_mstr(ar);
+    h += 1;
 	}
-	tmp->w = w;
 	tmp->h = h;
 	close(fd);
 	ft_strdel(line);

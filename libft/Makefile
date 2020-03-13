@@ -6,14 +6,9 @@
 #    By: slisandr <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/12 21:31:09 by slisandr          #+#    #+#              #
-#    Updated: 2020/02/09 00:47:06 by slisandr         ###   ########.fr        #
+#    Updated: 2020/03/13 23:53:57 by fcatina          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-# COLORS
-GREEN = \033[0;32m
-RED = \033[0;31m
-RESET = \033[0m
 
 .PHONY: all clean fclean re norm
 
@@ -113,24 +108,18 @@ EXEC = program
 all: $(NAME)
 
 $(NAME): $(OBJ_DIR) $(OBJ)
-	@ echo "$(NAME): $(GREEN)object files were created$(RESET)"
 	@ ar rc $(NAME) $(OBJ)
 	@ ranlib $(NAME)
-	@ echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@ gcc $(CFLAGS) -I "includes/" -c $< -o $@
 $(OBJ_DIR):
 	@ mkdir -p $(OBJ_DIR)
-	@ echo "$(NAME): $(GREEN)$(OBJ_DIR) folder was created$(RESET)"
 
 
 clean:
 	@ rm -rf $(OBJ_DIR)
-	@ echo "$(NAME): $(RED)object files were deleted$(RESET)"
-	@ echo "$(NAME): $(RED)$(OBJ_DIR) folder was deleted$(RESET)"
 fclean: clean
 	@ rm -f $(NAME)
-	@ echo "$(NAME): $(RED)$(NAME) was deleted$(RESET)"
 re: fclean all
 
 

@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:45:31 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/13 22:49:14 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/14 00:27:05 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,16 @@ void	get_width_and_heigth(t_fdf *tmp, char **ar, char *file)
 		ar = ft_strsplit(*line, ' ');
 		while (ar[w])
 			w += 1;
+		free_line_ar(line, ar);
 		if (tmp->w == 0)
 			tmp->w = w;
 		if (tmp->w != w)
 			exit(1);
-		free_line_ar(line, ar);
 		h += 1;
 	}
 	tmp->h = h;
-	close(fd);
 	ft_strdel(line);
+	close(fd);
 }
 
 int		**get_num_matrix(t_fdf *tmp, char *file)

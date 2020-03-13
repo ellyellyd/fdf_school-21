@@ -6,29 +6,57 @@
 #    By: fcatina <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/26 01:56:03 by fcatina           #+#    #+#              #
-#    Updated: 2020/03/12 05:30:25 by fcatina          ###   ########.fr        #
+#    Updated: 2020/03/13 23:59:54 by fcatina          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC=\
-	src/main.c \
-	src/draw.c \
-	src/do_key.c \
-	src/change_param.c \
-	src/get_num_matrix.c \
-	src/get_struct_matrix.c \
-	src/free_m_num_and_struct.c \
-	src/print_background_and_menu.c \
+.PHONY: all re clean fclean norm libft memcheck
 
-OBJS=\
-	src/main.o \
-	src/draw.o \
-	src/do_key.o \
-	src/change_param.o \
-	src/get_num_matrix.o \
-	src/get_struct_matrix.o \
-	src/free_m_num_and_str.ot.o \
-	src/print_background_and_menu.o \
+NAME = fdf
 
-all:
-	gcc -I libft/includes -L libft/ -lft -lmlx -framework OpenGL -framework AppKit -Wall -Wextra -Werror $(SRC) -o fdf
+SRC_DIR = src
+OBJ_DIR = obj
+
+MAIN_RAW = main.c
+MAIN = $(addprefix $(SRC_DIR)/,$(MAIN_RAW))
+
+CC = gcc
+LFLAGS = 
+CFLAGS = -Wall -Wextra -Werror -g
+
+SRC_RAW = \
+	draw.c \
+	do_key.c \
+	change_param.c \
+	get_num_matrix.c \
+	get_struct_matrix.c \
+	free_m_num_and_struct.c \
+	print_background_and_menu.c \
+
+SRC = $(addprefix $(SRC_DIR)/,$(SRC_RAW))
+OBJ = $(addprefix $(OBJ_DIR)/,$(SRC_RAW:.c=.o))
+
+all: $(NAME)
+
+$(NAME): libft $(OBJ_DIR) $(OBJ) 
+	$(CC) $(LFLAGS) -I libft/includes -L libft/ -lft -lmlx -framework OpenGL -framework AppKit $(OBJ) $(MAIN) -o $(NAME)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CFLAGS) -I libft/includes -c $< -o $@
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+libft:
+	make -C libft/
+
+clean:
+	rm -rf $(OBJ_DIR)
+	make clean -C libft/
+fclean: clean
+	rm -f $(NAME)
+	make fclean -C libft/ 
+re: fclean all
+
+norm:
+	norminette $(SRC_DIR) includes
+
+memcheck:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./$(NAME) test_maps/42.fdf

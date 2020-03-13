@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:44:58 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/12 01:07:03 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/14 00:21:51 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		deal_key(int key, t_fdf **mtrx)
 		print_background(mtrx);
 		draw_struct(mtrx);
 	}
-	if (key == 53)
+	else if (key == 53)
 	{
 		mlx_destroy_window(mtrx[0][0].mlx_ptr, mtrx[0][0].win_ptr);
 		free(mtrx);

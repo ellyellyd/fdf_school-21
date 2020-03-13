@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:44:58 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/14 00:21:51 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/14 01:05:09 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int		main(int argc, char **argv)
 	set_start_param(m_struct, tmp, argv);
 	print_background(m_struct);
 	draw_struct(m_struct);
-	mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);
+	mlx_hook(m_struct[0][0].win_ptr, 2, 0, deal_key, m_struct);
+//	mlx_key_hook(m_struct[0][0].win_ptr, deal_key, m_struct);
 	mlx_loop(m_struct[0][0].mlx_ptr);
 	free_m_struct(m_struct);
 	return (0);

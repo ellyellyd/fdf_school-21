@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:46:37 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/12 01:35:54 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/13 22:42:55 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,6 @@ void	print_background(t_fdf **m)
 		}
 		y++;
 	}
-  if (m[0][0].menu == 1)
-			print_menu(m);
+	if (m[0][0].menu == 1)
+		print_menu(m);
 }

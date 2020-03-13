@@ -6,7 +6,7 @@
 /*   By: fcatina <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 20:45:31 by fcatina           #+#    #+#             */
-/*   Updated: 2020/03/12 00:59:26 by fcatina          ###   ########.fr       */
+/*   Updated: 2020/03/13 22:49:14 by fcatina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ int		**fill_num_matrix(t_fdf *tmp, char **ar, int **m, char *file)
 	return (m);
 }
 
+void	free_line_ar(char **line, char **ar)
+{
+	ft_strdel(line);
+	wipe_mstr(ar);
+}
+
 void	get_width_and_heigth(t_fdf *tmp, char **ar, char *file)
 {
 	int		w;
@@ -50,21 +56,20 @@ void	get_width_and_heigth(t_fdf *tmp, char **ar, char *file)
 
 	w = 0;
 	h = 0;
-  tmp->w = 0;
+	tmp->w = 0;
 	line = (char **)ft_memalloc(sizeof(char *));
 	fd = open(file, O_RDONLY);
 	while (get_next_line(fd, line) > 0)
 	{
-    ar = ft_strsplit(*line, ' ');
-    while (ar[w])
-      w += 1;
-    if (tmp->w == 0)
-      tmp->w = w;
-    if (tmp->w != w)
-      exit (1);
-    ft_strdel(line);
-    wipe_mstr(ar);
-    h += 1;
+		ar = ft_strsplit(*line, ' ');
+		while (ar[w])
+			w += 1;
+		if (tmp->w == 0)
+			tmp->w = w;
+		if (tmp->w != w)
+			exit(1);
+		free_line_ar(line, ar);
+		h += 1;
 	}
 	tmp->h = h;
 	close(fd);

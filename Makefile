@@ -6,7 +6,7 @@
 #    By: fcatina <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/26 01:56:03 by fcatina           #+#    #+#              #
-#    Updated: 2020/03/13 23:59:54 by fcatina          ###   ########.fr        #
+#    Updated: 2020/03/14 00:33:20 by fcatina          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ MAIN = $(addprefix $(SRC_DIR)/,$(MAIN_RAW))
 
 CC = gcc
 LFLAGS = 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 SRC_RAW = \
 	draw.c \
@@ -56,7 +56,7 @@ fclean: clean
 re: fclean all
 
 norm:
-	norminette $(SRC_DIR) includes
+	norminette $(SRC_DIR)/ libft/src/ libft/includes/
 
 memcheck:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./$(NAME) test_maps/42.fdf
